@@ -10,7 +10,7 @@ import (
 func main(){
 	var engine *xorm.Engine
 	var err error
-	engine, err = xorm.NewEngine("mysql", "root:123456@tcp(192.168.160.133:3306)/aa")
+	engine, err = xorm.NewEngine("mysql", "root:password@tcp(192.168.xx.xx:port)/aa")
 	if err != nil {
 		fmt.Println("input ocur some error")
 	} else {
