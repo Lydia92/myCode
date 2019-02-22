@@ -8,10 +8,10 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 
 	"os/exec"
-	"log"
+	//"log"
 	"strings"
 	"strconv"
-	"encoding/json"
+	//"encoding/json"
 )
 
 func main() {
@@ -22,19 +22,14 @@ func main() {
 
 }
 
-func sysInfo()string{
-	info:=make(map[string]map[string]string)
-	//dis:=make(map[string]string)
+func sysInfo()map[string]interface{}{
+	info:=make(map[string]interface{})
 	cp:=make(map[string]string)
 	memory:=make(map[string]string)
 	cmd :=exec.Command("df","-hP")
-	out,err:=cmd.CombinedOutput()
-	if err!=nil{
-		log.Fatal(err)
-	}
+	out,_:=cmd.CombinedOutput()
 	str:=string(out)
-
-	//fmt.Println(strings.Fields(str))
+    var diskinfo []interface{}
 	st:=strings.Fields(str)
 	for i,v :=range st{
 		if i%6==0 && i !=0 && i!=6{
@@ -42,6 +37,7 @@ func sysInfo()string{
 			if err!=nil{
 				fmt.Println("err")
 			}
+			diskinfo=append(diskinfo,d.Path)
 			//dis["Path"]=d.Path
 			//dis["diskTotal"]=strconv.Itoa(int(d.Total/1024/1024/1024))
 			//dis["diskFree"]=strconv.Itoa(int(d.Free/1024/1024/1024))
@@ -50,8 +46,8 @@ func sysInfo()string{
 			ds := map[string]string{"diskTotal":strconv.Itoa(int(d.Total/1024/1024)),
 				"diskUsed":strconv.Itoa(int(d.Used/1024/1024)),"diskFree":strconv.Itoa(int(d.Free/1024/1024)),
 				"diskUsedPercent":strconv.Itoa(int(d.UsedPercent))}
-
-			info[d.Path]=ds
+			diskinfo=append(diskinfo,ds)
+			info["diskinfo"]=diskinfo
 			//aa:=make(map[string]string)
 
 			//info["disk"]=dis
@@ -75,16 +71,16 @@ func sysInfo()string{
 	memory["SwapTotal"]=strconv.Itoa(int(m.SwapTotal/1024/1024))
 	memory["SwapFree"]=strconv.Itoa(int(m.SwapFree/1024/1024))
 	info["memory"]=memory
-	i,err:=cpu.Counts(true)
+	i,_:=cpu.Counts(true)
 	//fmt.Println("CPU:",i)
 	cp["cpuCounts"]=strconv.Itoa(int(i))
 	info["cpu"]=cp
-	s,err:=json.Marshal(info)
+/*	s,err:=json.Marshal(info)
 	if err!=nil{
 		fmt.Println("error")
 	}
-	ss:=string(s)
-	return ss
+	ss:=string(s)*/
+	return info
 
 	//return info
 

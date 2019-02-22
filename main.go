@@ -42,7 +42,7 @@ type Userinfo struct {
 	CreateTime time.Time `xorm:"created"`
 	UpdateTime time.Time `xorm:"updated"`
 }
-type MysqlMetadataTables struct {
+type MysqlMetadataTables1 struct {
 	Node_addr       string
 	Node_port       int
 	Table_schema    string
@@ -257,7 +257,7 @@ func (con *connectInfo) GetIndexs(host string, port int) {
 	}
 }
 func (con *connectInfo) GetTable(host string, port int) {
-	var mysqlMetadataTtables MysqlMetadataTables
+	var mysqlMetadataTtables MysqlMetadataTables1
 	sql := "SELECT table_schema, table_name, engine, row_format, table_rows, avg_row_length,data_length," +
 		" max_data_length,index_length, data_free, auto_increment,table_collation, table_comment," +
 		" create_time, update_time, check_time FROM information_schema.tables " +
